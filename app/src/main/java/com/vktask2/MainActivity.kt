@@ -7,12 +7,12 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import com.vktask2.data.AppContainer
 import com.vktask2.notifications.PictureNotifier
 import com.vktask2.ui.screens.PhotoGridScreen
-import com.vktask2.ui.theme.VkTask2Theme
 
 class MainActivity : ComponentActivity() {
 
@@ -32,7 +32,7 @@ class MainActivity : ComponentActivity() {
         askForNotificationPermissionIfNeeded()
 
         setContent {
-            VkTask2Theme {
+            MaterialTheme {
                 val state by viewModel.state.collectAsState()
 
                 PhotoGridScreen(

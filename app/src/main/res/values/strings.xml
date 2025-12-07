@@ -8,7 +8,7 @@
     <string name="loading_content">Загрузка...</string>
     <string name="notification_channel_name">Клики по картинкам</string>
     <string name="notification_channel_description">Уведомления о выбранных картинках</string>
-    <string name="notification_title">Картинка %1$s</string>
+    <string name="notification_title">Картинка</string>
     <string name="notification_message">Порядковый номер: %1$d</string>
 </resources>
 

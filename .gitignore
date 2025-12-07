@@ -7,6 +7,9 @@ build/
 local.properties
 .idea/
 *.iml
+gradlew
+gradlew.bat
+gradle/wrapper/
 
 # OS
 .DS_Store

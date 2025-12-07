@@ -11,12 +11,13 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.GridItemSpan
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.LazyGridState
-import androidx.compose.foundation.lazy.grid.itemsIndexed
-import androidx.compose.foundation.lazy.grid.rememberLazyGridState
+import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
+import androidx.compose.foundation.lazy.staggeredgrid.LazyStaggeredGridState
+import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
+import androidx.compose.foundation.lazy.staggeredgrid.itemsIndexed
+import androidx.compose.foundation.lazy.staggeredgrid.rememberLazyStaggeredGridState
+import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridItemSpan
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
@@ -27,6 +28,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -68,12 +70,14 @@ private fun PhotoGridContent(
     onLoadMore: () -> Unit,
     onPhotoClick: (Photo, Int) -> Unit
 ) {
-    val listState: LazyGridState = rememberLazyGridState()
+    val listState: LazyStaggeredGridState = rememberLazyStaggeredGridState()
 
-    val shouldLoadMore by derivedStateOf {
-        val lastVisible = listState.layoutInfo.visibleItemsInfo.lastOrNull()?.index ?: 0
-        val totalCount = listState.layoutInfo.totalItemsCount
-        totalCount > 0 && lastVisible >= totalCount - 4
+    val shouldLoadMore by remember {
+        derivedStateOf {
+            val lastVisible = listState.layoutInfo.visibleItemsInfo.lastOrNull()?.index ?: 0
+            val totalCount = listState.layoutInfo.totalItemsCount
+            totalCount > 0 && lastVisible >= totalCount - 4
+        }
     }
 
     LaunchedEffect(shouldLoadMore) {
@@ -83,10 +87,10 @@ private fun PhotoGridContent(
     }
 
     Box(modifier = Modifier.fillMaxSize()) {
-        LazyVerticalGrid(
-            columns = GridCells.Adaptive(minSize = 150.dp),
+        LazyVerticalStaggeredGrid(
+            columns = StaggeredGridCells.Adaptive(minSize = 150.dp),
             state = listState,
-            verticalArrangement = Arrangement.spacedBy(8.dp),
+            verticalItemSpacing = 8.dp,
             horizontalArrangement = Arrangement.spacedBy(8.dp),
             contentPadding = androidx.compose.foundation.layout.PaddingValues(12.dp)
         ) {
@@ -102,13 +106,13 @@ private fun PhotoGridContent(
             }
 
             if (state.isPaging) {
-                item(span = { GridItemSpan(maxCurrentLineSpan) }) {
+                item(span = StaggeredGridItemSpan.FullLine) {
                     PaginationLoading()
                 }
             }
 
             if (state.pagingError) {
-                item(span = { GridItemSpan(maxCurrentLineSpan) }) {
+                item(span = StaggeredGridItemSpan.FullLine) {
                     PaginationError(onRetry = onLoadMore)
                 }
             }
