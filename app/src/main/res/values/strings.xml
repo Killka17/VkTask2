@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">VkTask2</string>
+    <string name="retry">Повторить</string>
+    <string name="try_again">Попробовать снова</string>
+    <string name="error_message">Не удалось загрузить данные</string>
+    <string name="pagination_error">Не удалось догрузить данные</string>
+    <string name="loading_content">Загрузка...</string>
+    <string name="notification_channel_name">Клики по картинкам</string>
+    <string name="notification_channel_description">Уведомления о выбранных картинках</string>
+    <string name="notification_title">Картинка %1$s</string>
+    <string name="notification_message">Порядковый номер: %1$d</string>
+</resources>
+
