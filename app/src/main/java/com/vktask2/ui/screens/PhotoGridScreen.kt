@@ -28,7 +28,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -37,6 +39,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.vktask2.UiState
@@ -71,6 +75,7 @@ private fun PhotoGridContent(
     onPhotoClick: (Photo, Int) -> Unit
 ) {
     val listState: LazyStaggeredGridState = rememberLazyStaggeredGridState()
+    var fullscreenPhoto by remember { mutableStateOf<Photo?>(null) }
 
     val shouldLoadMore by remember {
         derivedStateOf {
@@ -101,7 +106,10 @@ private fun PhotoGridContent(
                 PhotoCard(
                     photo = photo,
                     position = index,
-                    onPhotoClick = onPhotoClick
+                    onPhotoClick = { clicked, clickedIndex ->
+                        fullscreenPhoto = clicked
+                        onPhotoClick(clicked, clickedIndex)
+                    }
                 )
             }
 
@@ -115,6 +123,15 @@ private fun PhotoGridContent(
                 item(span = StaggeredGridItemSpan.FullLine) {
                     PaginationError(onRetry = onLoadMore)
                 }
+            }
+        }
+
+        fullscreenPhoto?.let { selected ->
+            Dialog(
+                onDismissRequest = { fullscreenPhoto = null },
+                properties = DialogProperties(usePlatformDefaultWidth = false)
+            ) {
+                PhotoFullScreen(photo = selected)
             }
         }
     }
